@@ -1,0 +1,314 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      9977,        306]
+NotebookOptionsPosition[      8901,        279]
+NotebookOutlinePosition[      9259,        295]
+CellTagsIndexPosition[      9216,        292]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Clear", "[", "\"\<Global`*\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]1", "=", "x"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]2", "=", 
+   SuperscriptBox["x", "2"]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]3", "=", 
+   SuperscriptBox["x", "3"]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"F", "=", 
+   RowBox[{
+    RowBox[{"\[Rho]gA", 
+     RowBox[{"(", 
+      RowBox[{"L", "-", "x"}], ")"}]}], "+", "NN"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"func", "[", 
+    RowBox[{"f_", ",", "g_"}], "]"}], ":=", 
+   RowBox[{
+    SubsuperscriptBox["\[Integral]", "0", "L"], 
+    RowBox[{"f", " ", "g", " ", 
+     RowBox[{"\[DifferentialD]", "x"}]}]}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.8667777511588793`*^9, 3.866777829707922*^9}, {
+  3.8667779051590595`*^9, 3.8667779079706926`*^9}, {3.8667779843951097`*^9, 
+  3.86677802809652*^9}, {3.8667784173153386`*^9, 3.8667784195405517`*^9}},
+ CellLabel->"In[54]:=",ExpressionUUID->"e0226360-aa3a-4e91-bf83-2a6ff2259efc"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"A", "=", 
+   RowBox[{
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"func", "[", 
+         RowBox[{"\[Phi]1", ",", 
+          RowBox[{
+           SubscriptBox["\[PartialD]", "x"], "\[Phi]1"}]}], "]"}], ",", 
+        RowBox[{"func", "[", 
+         RowBox[{"\[Phi]1", ",", 
+          RowBox[{
+           SubscriptBox["\[PartialD]", "x"], "\[Phi]2"}]}], "]"}], ",", 
+        RowBox[{"func", "[", 
+         RowBox[{"\[Phi]1", ",", 
+          RowBox[{
+           SubscriptBox["\[PartialD]", "x"], "\[Phi]3"}]}], "]"}]}], "}"}], 
+      ",", "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"func", "[", 
+         RowBox[{"\[Phi]2", ",", 
+          RowBox[{
+           SubscriptBox["\[PartialD]", "x"], "\[Phi]1"}]}], "]"}], ",", 
+        RowBox[{"func", "[", 
+         RowBox[{"\[Phi]2", ",", 
+          RowBox[{
+           SubscriptBox["\[PartialD]", "x"], "\[Phi]2"}]}], "]"}], ",", 
+        RowBox[{"func", "[", 
+         RowBox[{"\[Phi]2", ",", 
+          RowBox[{
+           SubscriptBox["\[PartialD]", "x"], "\[Phi]3"}]}], "]"}]}], "}"}], 
+      ",", "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"func", "[", 
+         RowBox[{"\[Phi]3", ",", 
+          RowBox[{
+           SubscriptBox["\[PartialD]", "x"], "\[Phi]1"}]}], "]"}], ",", 
+        RowBox[{"func", "[", 
+         RowBox[{"\[Phi]3", ",", 
+          RowBox[{
+           SubscriptBox["\[PartialD]", "x"], "\[Phi]2"}]}], "]"}], ",", 
+        RowBox[{"func", "[", 
+         RowBox[{"\[Phi]3", ",", 
+          RowBox[{
+           SubscriptBox["\[PartialD]", "x"], "\[Phi]3"}]}], "]"}]}], "}"}]}], 
+     "\[IndentingNewLine]", "}"}], "//", "Simplify"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"A", "//", "MatrixForm"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"b", "=", 
+   RowBox[{
+    RowBox[{
+     FractionBox["1", "EA"], 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"func", "[", 
+        RowBox[{"F", ",", "\[Phi]1"}], "]"}], ",", 
+       RowBox[{"func", "[", 
+        RowBox[{"F", ",", "\[Phi]2"}], "]"}], ",", 
+       RowBox[{"func", "[", 
+        RowBox[{"F", ",", "\[Phi]3"}], "]"}]}], "}"}]}], "//", "Simplify"}]}],
+   ";"}], "\[IndentingNewLine]", 
+ RowBox[{"b", "//", "MatrixForm"}]}], "Input",
+ CellChangeTimes->{{3.8667780931728835`*^9, 3.8667781160497704`*^9}, {
+  3.8667781478988647`*^9, 3.866778341637106*^9}},
+ CellLabel->"In[60]:=",ExpressionUUID->"f3b62bf1-8ac3-4f5d-a1c0-7d98e95d4466"],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      FractionBox[
+       SuperscriptBox["L", "2"], "2"], 
+      FractionBox[
+       RowBox[{"2", " ", 
+        SuperscriptBox["L", "3"]}], "3"], 
+      FractionBox[
+       RowBox[{"3", " ", 
+        SuperscriptBox["L", "4"]}], "4"]},
+     {
+      FractionBox[
+       SuperscriptBox["L", "3"], "3"], 
+      FractionBox[
+       SuperscriptBox["L", "4"], "2"], 
+      FractionBox[
+       RowBox[{"3", " ", 
+        SuperscriptBox["L", "5"]}], "5"]},
+     {
+      FractionBox[
+       SuperscriptBox["L", "4"], "4"], 
+      FractionBox[
+       RowBox[{"2", " ", 
+        SuperscriptBox["L", "5"]}], "5"], 
+      FractionBox[
+       SuperscriptBox["L", "6"], "2"]}
+    },
+    GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{{3.8667783425222273`*^9, 3.8667783565561438`*^9}, 
+   3.8667784334084797`*^9, {3.8667792028678727`*^9, 3.8667792216524005`*^9}},
+ CellLabel->
+  "Out[61]//MatrixForm=",ExpressionUUID->"cc500371-482b-4846-afd5-\
+b78c21513732"],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", 
+   TagBox[GridBox[{
+      {
+       FractionBox[
+        RowBox[{
+         SuperscriptBox["L", "2"], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"3", " ", "NN"}], "+", 
+           RowBox[{"L", " ", "\[Rho]gA"}]}], ")"}]}], 
+        RowBox[{"6", " ", "EA"}]]},
+      {
+       FractionBox[
+        RowBox[{
+         SuperscriptBox["L", "3"], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"4", " ", "NN"}], "+", 
+           RowBox[{"L", " ", "\[Rho]gA"}]}], ")"}]}], 
+        RowBox[{"12", " ", "EA"}]]},
+      {
+       FractionBox[
+        RowBox[{
+         SuperscriptBox["L", "4"], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"5", " ", "NN"}], "+", 
+           RowBox[{"L", " ", "\[Rho]gA"}]}], ")"}]}], 
+        RowBox[{"20", " ", "EA"}]]}
+     },
+     GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+     GridBoxSpacings->{"Columns" -> {
+         Offset[0.27999999999999997`], {
+          Offset[0.5599999999999999]}, 
+         Offset[0.27999999999999997`]}, "Rows" -> {
+         Offset[0.2], {
+          Offset[0.4]}, 
+         Offset[0.2]}}],
+    Column], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{{3.8667783425222273`*^9, 3.8667783565561438`*^9}, 
+   3.8667784334084797`*^9, {3.8667792028678727`*^9, 3.866779221670401*^9}},
+ CellLabel->
+  "Out[63]//MatrixForm=",ExpressionUUID->"1f057c6e-341a-408f-a040-\
+90a6faa228bf"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"{", 
+   RowBox[{"a1", ",", "a2", ",", "a3"}], "}"}], "=", 
+  RowBox[{
+   RowBox[{"Dot", "[", 
+    RowBox[{
+     RowBox[{"Inverse", "[", "A", "]"}], ",", "b"}], "]"}], "//", 
+   "Simplify"}]}]], "Input",
+ CellChangeTimes->{{3.866778644773775*^9, 3.866778660532198*^9}, {
+  3.8667787291855264`*^9, 3.86677873294796*^9}},
+ CellLabel->"In[64]:=",ExpressionUUID->"3167e4d2-5a01-4a48-a07e-9080e63f17b0"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   FractionBox[
+    RowBox[{"NN", "+", 
+     RowBox[{"L", " ", "\[Rho]gA"}]}], "EA"], ",", 
+   RowBox[{"-", 
+    FractionBox["\[Rho]gA", 
+     RowBox[{"2", " ", "EA"}]]}], ",", "0"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.86677866129959*^9, 3.8667787339087067`*^9, {3.866779202912942*^9, 
+   3.8667792216914005`*^9}},
+ CellLabel->"Out[64]=",ExpressionUUID->"a1bc546a-43e1-46ec-9f35-f99e6b118d85"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"u", "=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"a1", " ", "x"}], "+", 
+    RowBox[{"a2", " ", 
+     SuperscriptBox["x", "2"]}]}], "//", "Expand"}]}]], "Input",
+ CellChangeTimes->{{3.8667787420338993`*^9, 3.8667787512724*^9}, {
+  3.8667791913985996`*^9, 3.8667792140042553`*^9}},
+ CellLabel->"In[65]:=",ExpressionUUID->"5afdd26b-252c-42d1-9073-8c61bc50dfae"],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox[
+   RowBox[{"NN", " ", "x"}], "EA"], "+", 
+  FractionBox[
+   RowBox[{"L", " ", "x", " ", "\[Rho]gA"}], "EA"], "-", 
+  FractionBox[
+   RowBox[{
+    SuperscriptBox["x", "2"], " ", "\[Rho]gA"}], 
+   RowBox[{"2", " ", "EA"}]]}]], "Output",
+ CellChangeTimes->{
+  3.866778751727676*^9, {3.866779202937025*^9, 3.866779221711401*^9}},
+ CellLabel->"Out[65]=",ExpressionUUID->"49b0354d-b732-4c4b-923d-a38961c78477"]
+}, Open  ]]
+},
+WindowSize->{759, 697},
+WindowMargins->{{Automatic, -961}, {28, Automatic}},
+FrontEndVersion->"12.0 for Microsoft Windows (64-bit) (2019\:5e745\:670818\
+\:65e5)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 1106, 30, 160, "Input",ExpressionUUID->"e0226360-aa3a-4e91-bf83-2a6ff2259efc"],
+Cell[CellGroupData[{
+Cell[1689, 54, 2530, 70, 250, "Input",ExpressionUUID->"f3b62bf1-8ac3-4f5d-a1c0-7d98e95d4466"],
+Cell[4222, 126, 1360, 43, 118, "Output",ExpressionUUID->"cc500371-482b-4846-afd5-b78c21513732"],
+Cell[5585, 171, 1526, 47, 121, "Output",ExpressionUUID->"1f057c6e-341a-408f-a040-90a6faa228bf"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7148, 223, 432, 11, 45, "Input",ExpressionUUID->"3167e4d2-5a01-4a48-a07e-9080e63f17b0"],
+Cell[7583, 236, 440, 12, 50, "Output",ExpressionUUID->"a1bc546a-43e1-46ec-9f35-f99e6b118d85"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8060, 253, 379, 9, 45, "Input",ExpressionUUID->"5afdd26b-252c-42d1-9073-8c61bc50dfae"],
+Cell[8442, 264, 443, 12, 85, "Output",ExpressionUUID->"49b0354d-b732-4c4b-923d-a38961c78477"]
+}, Open  ]]
+}
+]
+*)
+
