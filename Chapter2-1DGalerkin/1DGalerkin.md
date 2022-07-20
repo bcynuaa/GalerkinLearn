@@ -119,3 +119,28 @@ $$
 \tilde{y} = a_1 x + a_2 x^2 + a^3 x^3
 $$
 
+按照前文所述的，记：
+
+$$
+H(F) = \int_0^3 F(x)dx
+$$
+
+记$f(x)=x^3 e^x$，$\phi_j=x^j,j=1,2,3$。则可以列出方程：
+
+$$
+\begin{bmatrix}
+H(\phi_1 \phi_1') & H(\phi_1 \phi_2') & H(\phi_1 \phi_3')\\
+H(\phi_2 \phi_1') & H(\phi_2 \phi_2') & H(\phi_2 \phi_3')\\
+H(\phi_3 \phi_1') & H(\phi_3 \phi_2') & H(\phi_3 \phi_3')
+\end{bmatrix}
+\begin{bmatrix}
+a_1\\a_2\\a_3
+\end{bmatrix}=
+\begin{bmatrix}
+H(f\phi_1)\\H(f\phi_2)\\H(f\phi_3)
+\end{bmatrix}
+$$
+
+计算过程在`1DGalerkin.nb`中，计算结果如下图所示：
+
+![为什么不用Galerkin image//NoGalerkin.png](image//NoGalerkin.png)
