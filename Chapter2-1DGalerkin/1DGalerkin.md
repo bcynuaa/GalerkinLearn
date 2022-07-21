@@ -149,4 +149,172 @@ $$
 
 # 3.小段上的伽辽金法研究
 
-让我们来考察一个微小的区间$[x_k,x_{k+1}]$，记步长为$h_k=x_{k+1}-x_k$。假定在$x_k$点上，方程$Au=f$的解为$u_k$，在$x_{k+1}上解为$$u_{k+1}$，这样的一个区间被称作一个一维单元。
+让我们来考察一个微小的区间$[x_k,x_{k+1}]$，记步长为$h_k=x_{k+1}-x_k$。假定在$x_k$点上，方程$Au=f$的解为$u_k$，在$x_{k+1}上解为$$u_{k+1}$，这样的一个区间被称作一个一维单元。如图：
+
+![一个小段 image//element.png](image//element.png)
+
+在小段上，我们不需要给太过复杂的局部表达式，只需要给出一个基础的线性插值函数即可。在这里有边界条件：
+
+$$
+u(x_k)=u_k\quad u(x_{k+1})=u_{k+1}
+$$
+
+
+因此此时在该小段上的线性插值应该表示为（波浪上标表示伽辽金插值解）：
+
+$$
+\tilde{u}(x) = \frac{x_{k+1}-x}{h_k}u_{k}+\frac{x-x_k}{h_k}u_{k+1}
+$$
+
+记：
+
+$$
+\begin{cases}
+\phi_{0}^k(x) &= \frac{x_{k+1}-x}{h_k}\\
+\phi_{1}^{k}(x) &= \frac{x-x_k}{h_k}
+\end{cases}
+$$
+
+显然有：
+
+$$
+\frac{d\phi_0^k}{dx} =-\frac{d\phi_1^k}{dx} =-\frac{1}{h_k}
+$$
+
+于是可以记作：
+
+$$
+\tilde{u}(x) = \phi_0^k u_k + \phi_1^k u_{k+1}\quad x_k\leq x\leq x_{k+1}
+$$
+
+我们将$\phi_0^k$和$\phi_1^k$视作基函数，并在这个小单元上对其进行Galerkin类似的分析。
+
+$$
+\int_{x_k}^{x_{k+1}}(A\tilde{u}-f)\phi_j^k dx=0\quad j=0,1
+$$
+
+同样记：
+
+$$
+H_k(f)=\int_{x_k}^{x_{k+1}}f(x)dx
+$$
+
+将上述改写为矩阵乘法形式：
+
+$$
+\begin{bmatrix}
+H_k(\phi_0^k A\phi_0^k) & H_k(\phi_0^k A\phi_1^k)\\
+H_k(\phi_1^k A\phi_0^k) & H_k(\phi_1^k A\phi_1^k)
+\end{bmatrix}
+\begin{bmatrix}
+u_{k}\\u_{k+1}
+\end{bmatrix}=
+\begin{bmatrix}
+H_k(f\phi_0^k)\\ H_k(f\phi_1^k)
+\end{bmatrix}
+$$
+
+但是**注意**，先别急着对上述矩阵求逆，因为**这只是一个单元而已**——要想获得最终的大方程，必须要考虑**所有小微段**对整个方程进行组装。
+
+# 4.以四节点为例展示矩阵组装
+
+为方便书写，进行如下标记：
+
+$$
+\begin{cases}
+\begin{aligned}
+& H_k(\phi_i^k A\phi_j^k) = A_{ij}^k\quad i,j\in \{1,0\}\\
+& H_k(f\phi_i^k)=b^k_i\quad i=0,1
+\end{aligned}
+\end{cases}
+$$
+
+我们可以来理解一下上述表达的含义：
+
+$A_{ij}^k$表示$k$号单元（区间）上，节点$j$对节点$i$处的“贡献”。
+
+$b_i^k$表示$k$号单元（区间）上，节点$i$所得的“贡献值”。
+
+我们考虑将区间分成三段四节点的形式：
+
+![image//element_generation.png](image//element_generation.png)
+
+我们考虑$u_1$这个点，这个点横跨两个单元，即单元$0$和单元$1$。
+
+1. 在单元$0$上，节点$0$上的$u_0$对$u_1$有贡献$A^0_{10}u_0$，节点$1$上的$u_1$对自身也有贡献$A^0_{11}u_1$。
+
+2. 在单元$1$上，节点$1$上的$u_1$对自身有贡献$A^1_{00}u_1$，节点2上的$u_2$对自身也有贡献$A^1_{01}u_2$。
+
+3. 而$u_1$处总贡献值由两侧单元提供，为$b^0_1+b^1_0$。其中$b^0_1$表示单元$0$给节点$1$提供的总贡献值，$b^1_0$表示单元$1$对节点$1$的总贡献值。
+
+于是针对节点$1$可以列出如下方程：
+
+$$
+A^0_{10}u_0 + (A_{11}^0+A^1_{00})u_1 + A_{01}^1 u_2 = b^0_1+b^1_0
+$$
+
+对每个节点进行方程拼装，得到最终的矩阵形式方程$Au=b$：
+
+$$
+\begin{bmatrix}
+A^0_{00} & A^0_{01} & 0 & 0\\
+A^0_{10} & A^0_{11} + A^1_{00} & A^1_{01} & 0\\
+0 & A^1_{10} & A^1_{11}+A^2_{00} & A^2_{01}\\
+0 & 0 & A^2_{10} & A^2_{11}
+\end{bmatrix}
+\begin{bmatrix}
+u_0 \\ u_1 \\ u_2 \\ u_3
+\end{bmatrix}=
+\begin{bmatrix}
+b^0_0 \\ b^0_1+b^1_0 \\ b^1_1 + b^2_0 \\ b^2_1
+\end{bmatrix}
+$$
+
+若节点更多，单元数量更多，按照类似方法进行矩阵拼装，最终能得到一个“鸡爪型”的$A$矩阵。此刻再配合上$u_0$的初始边界条件，可以一行一行消去求解该线性方程组。
+
+# 5.积分换元
+
+显然，因为每一个单元的$x_k$与区间步长不一致，因此每个单元上的基函数$\phi^k_j(j=0,1)$是不尽相同的。对于每个不同的积分单元，我们可以尝试着寻找一些积函数的共性进行分析。
+
+考虑如下换元：
+
+$$
+\xi=\frac{x-x_k}{h_k}\quad h_k d\xi = dx
+$$
+
+因此可以如下表示：
+
+$$
+\begin{cases}
+\begin{aligned}
+\phi^k_0 &= 1-\xi\\
+\phi^k_1 &= \xi
+\end{aligned}
+\end{cases}
+$$
+
+所以：
+
+$$
+\begin{aligned}
+H_k(\phi^k_i A \phi^k_j) &= \int_{x_k}^{x_{k+1}}\phi^k_i A \phi^k_jdx\\
+&=h_k\int_0^1 \phi^k_i A \phi^k_j d\xi
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+H_k(f\phi^k_j)&=\int_{x_k}^{x_{k+1}}f(x)\phi_j^kdx\\
+&=h_k\int_0^1   f(h_k\xi + x_k) \phi_j^k d\xi
+\end{aligned}
+$$
+
+这里的$\phi_j^k$是$\xi$与$1-\xi$，因此在微分算子$A$已知时，$H_k(\phi^k_i A \phi^k_j)$往往可以显示表示。而$f$往往没有显示的积分表达式（不然这个微分方程就直接解出来了），因此在$h_k$较小的前提下，我们可以利用[Simpson公式](https://blog.csdn.net/qq_32708325/article/details/84258964)或者只用简单的梯形公式进行近似：
+
+$$
+\begin{aligned}
+H_k(f\phi^k_0)&\approx \frac{h_k}{6}\left[ f(x_k) + 2f\left(x_{k}+\frac{h_k}{2}\right)\right]\\
+H_k(f\phi^k_1)&\approx \frac{h_k}{6}\left[ 2f\left(x_{k}+\frac{h_k}{2}\right) + f(x_{k+1})\right]
+\end{aligned}
+$$
+
