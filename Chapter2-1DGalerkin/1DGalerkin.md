@@ -76,7 +76,6 @@ $$
 # Chapter2-1DGalerkin//code//test.ipynb
 using Plots;
 include("Euler.jl");
-
 a = 0.;
 b = 3.;
 y0 = 0;
@@ -93,13 +92,13 @@ function f(x)
     return y;
 end
 
-xreal = collect(a: h: b);
+xreal = collect(a: 10*h: b);
 yreal = f_origin.(xreal);
 
 xnumer, ynumer = EulerForward(a, b, y0, f, devide)
 
-plot(xreal, yreal, lw=10, label="real solution", alpha=0.5)
-plot!(xnumer, ynumer, lw=3, label="numerical solution")
+scatter(xreal, yreal, lw=20, color=:red, label="real solution")
+plot!(xnumer, ynumer, lw=10, color=:blue, label="fem solution", alpha=0.5)
 savefig("..//image//fdm_example.png")
 ```
 
@@ -272,6 +271,8 @@ $$
 
 若节点更多，单元数量更多，按照类似方法进行矩阵拼装，最终能得到一个“鸡爪型”的$A$矩阵。此刻再配合上$u_0$的初始边界条件，可以一行一行消去求解该线性方程组。
 
+以上在局部使用Galerkin法获取弱解形式的整个流程，因为把整个区间划分成了有限个区域，因此也成为有限元方法。
+
 # 5.积分换元
 
 显然，因为每一个单元的$x_k$与区间步长不一致，因此每个单元上的基函数$\phi^k_j(j=0,1)$是不尽相同的。对于每个不同的积分单元，我们可以尝试着寻找一些积函数的共性进行分析。
@@ -318,3 +319,134 @@ H_k(f\phi^k_1)&\approx \frac{h_k}{6}\left[ 2f\left(x_{k}+\frac{h_k}{2}\right) + 
 \end{aligned}
 $$
 
+# 6.有限元方法在一阶常微分方程中的启示
+
+仍然考虑如下方程：
+
+$$
+\frac{du}{dx} = x^3 e^x
+$$
+
+显然在做前述的积分换元后，其中：
+
+$$
+A=\frac{d}{dx}=\frac{1}{h_k}\frac{d}{d\xi}
+$$
+
+于是可以得到：
+
+$$
+\begin{cases}
+\begin{aligned}
+H_k(\phi_0^k A\phi_0^k) &= -\int_0^1(1-\xi) d\xi=-\frac{1}{2}\\
+H_k(\phi_0^kA\phi_1^k) & = \int_0^1(1-\xi) d\xi=\frac{1}{2}\\
+H_k(\phi_1^k A\phi_0^k)&= -\int_0^1 \xi d\xi = -\frac{1}{2}\\
+H_k(\phi_1^k A\phi_1^k) &= \int_0^1 \xi d\xi=\frac{1}{2}
+\end{aligned}
+\end{cases}
+$$
+
+这个时候我们会惊奇地发现这个鸡爪型矩阵意外的简单：
+
+$$
+\begin{bmatrix}
+-\frac{1}{2} & \frac{1}{2} & 0 & 0 & \cdots & 0\\
+-\frac{1}{2} & 0 & \frac{1}{2} & 0 & \cdots & 0 \\
+0 & -\frac{1}{2} & 0 & \frac{1}{2} & \cdots & \vdots\\
+\vdots & \vdots & \ddots & \ddots & \ddots & 0 \\
+0 & 0 & 0 & 0 & -\frac{1}{2} & \frac{1}{2}
+\end{bmatrix}
+$$
+
+我们不妨挑选第一行第一列构成的线性方程来进行考量：
+
+$$
+\frac{u_1-u_0}{h_0} = \frac{1}{3}\left[ f(x_0) + 2f \left(x_0+\frac{h_0}{2}\right) \right]
+$$
+
+这其实就是一个简单的差分方程，用$\frac{1}{3}\left[ f(x_0) + 2f(x_1) \right]$取代了$u'(x_0)$项进行的计算。
+
+我们不妨在挑选第$i$行的线性方程来考量：
+
+$$
+\frac{u_{i+1}-u_{i-1}}{2}=
+\frac{h_{i-1}}{6}\left[ 2f\left(x_{i} - \frac{h_{i-1}}{2}\right) + f(x_i)\right]+
+\frac{h_i}{6}\left[ f(x_i) + 2f\left(x_i + \frac{h_i}{2}\right) \right]
+$$
+
+也即：
+
+$$
+\frac{u_{i+1}-u_{i-1}}{x_{i+1}-x_{i-1}}=
+\frac{2h_{i-1}}{3(h_{i-1}+h_i)} f\left(x_i-\frac{h_{i-1}}{2}\right)+
+\frac{1}{3}f(x_i)+
+\frac{2h_{i}}{3(h_{i-1}+h_i)} f\left(x_i+\frac{h_{i}}{2}\right)
+$$
+
+可以将此式理解为，在方程$Au=f$中，我们在节点$i$处进行如下替代：
+
+$$
+u'(x_i)\to\frac{u_{i+1}-u_{i-1}}{x_{i+1}-x_{i-1}}
+$$
+
+$$
+f(x_i)\to \frac{2h_{i-1}}{3(h_{i-1}+h_i)} f\left(x_i-\frac{h_{i-1}}{2}\right)+
+\frac{1}{3}f(x_i)+
+\frac{2h_{i}}{3(h_{i-1}+h_i)} f\left(x_i+\frac{h_{i}}{2}\right)
+$$
+
+我们再来看一下最后一行的方程：
+
+$$
+\frac{u_{n}-u_{n-1}}{2} = \frac{h_{n-1}}{6}\left[ f(x_{n-1}) + 2f\left( x_{n-1} + \frac{h_{n-1}}{2} \right) \right]
+$$
+
+行文至此，可以发现：事实上对于$u'=f$类型的方程，用有限元进行划分网格求解，其本质上的结果和FDM求解的过程似乎是趋同的。虽然用Galerkin在每个单元上进行的操作有所不同，但最终的结果表明，无论是有限元还是FDM，其都是在节点处使用**差商来代替微商**，在边界处开始一步步递进进行运算。
+
+我们来测试一下上述方法，给出求解函数：
+
+```julia
+# Chapter2-1DGa;erkin//code//Galerkin1D.jl
+function Galerkin1D_ODE1_Simpson(mesh1D, u0, f)
+    n = length(mesh1D) - 1;
+    u = zeros(n+1);
+    u[1] = u0;
+    h0 = mesh1D[2] - mesh1D[1];
+    u[2] = u0 + h0/3. * ( f(mesh1D[1]) + 2. * f(mesh1D[1] + h0/2.));
+    for i = 2:n-1
+        hi0 = mesh1D[i] - mesh1D[i-1];
+        hi1 = mesh1D[i+1] - mesh1D[i];
+        temp = 2*hi0/3 * f(mesh1D[i] - hi0/2.);
+        temp += (hi0+hi1)/3 * f(mesh1D[i]);
+        temp += 2*hi1/3 * f(mesh1D[i] + hi1/2.);
+        u[i+1] = u[i-1] + temp;
+    end
+    hn = mesh1D[n+1] - mesh1D[n];
+    u[n+1] = u[n] + hn/3. * ( f(mesh1D[n]) + 2. * f(mesh1D[n] + hn/2.) );
+    return u;
+end
+```
+
+给出测试代码：
+```julia
+# Chapter2-1DGalerkin//code//test.ipynb
+include("Galerkin1D.jl");
+u0 = y0;
+xmesh = collect(0:0.1:3);
+u = Galerkin1D_ODE1_Simpson(xmesh, u0, f);
+
+plot!(xmesh, u, lw=20, color=:green, alpha=0.3, label="fem solution")
+savefig("..//image//fem_example.png")
+```
+
+求解结果如下图所所示可以发现在划分成300个单元时，其解与真实解吻合得相当好，以$x=3$点为例，精确解为247.02644。在两种方法同划分300个单元时，前进欧拉FDM法算得249.747029，有限元FEM解法算得246.999657，精度略高于FDM方法。
+
+![有限元Galerkin初尝试 image//fem_example.png](image//fem_example.png)
+
+# 8.能否有更好的求解方式呢？
+
+不难发现，在求解结束后，整个函数本质上是由“逐段的直线”拼凑出来的，整个曲线并不光滑。那么能否有更好的解决方式呢？
+
+> 思考：在插值构造中存在样条插值，常用的有“三弯矩”方程。能否在每个单元节点上添加一阶导数或者二阶导数插值条件，从而让最后求得的函数在整个区域上更加光滑呢？
+
+留做后续的研究与思考。
